@@ -1,5 +1,4 @@
 import React from 'react';
-import { nanoid } from 'nanoid';
 import { ContactForm } from './Form/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
@@ -11,14 +10,15 @@ export class App extends React.Component {
     contacts: [],
     filter: '',
   };
-  formSubmit = (name, number) => {
+  formSubmit = newContact => {
     const { contacts } = this.state;
     contacts.find(
-      contact => contact.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+      contact =>
+        contact.name.toLocaleLowerCase() === newContact.name.toLocaleLowerCase()
     )
-      ? Notiflix.Notify.failure(`${name} is already  in contacts.`)
+      ? Notiflix.Notify.failure(`${newContact.name} is already  in contacts.`)
       : this.setState(prevState => ({
-          contacts: [...prevState.contacts, { id: nanoid(), name, number }],
+          contacts: [...prevState.contacts, newContact],
         }));
   };
   onSearch = event => {
@@ -45,17 +45,16 @@ export class App extends React.Component {
     return (
       <Section>
         <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.formSubmit} resetForm={this.resetForm} />
+        <ContactForm onSubmit={this.formSubmit} />
         {contacts.length > 0 && (
-          <Filter value={filter} onSearch={this.onSearch} />
-        )}
-        {contacts.length > 0 && (
-          <ContactList
-            contacts={this.filterContacts()}
-            onDelete={this.deleteContact}
-            title="Contacts"
-          />
-        )}
+            <Filter value={filter} onSearch={this.onSearch} />
+          ) && (
+            <ContactList
+              contacts={this.filterContacts()}
+              onDelete={this.deleteContact}
+              title="Contacts"
+            />
+          )}
       </Section>
     );
   }
