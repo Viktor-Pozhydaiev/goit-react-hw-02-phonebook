@@ -47,14 +47,15 @@ export class App extends React.Component {
         <h1>Phonebook</h1>
         <ContactForm onSubmit={this.formSubmit} />
         {contacts.length > 0 && (
+          <>
             <Filter value={filter} onSearch={this.onSearch} />
-          ) && (
             <ContactList
               contacts={this.filterContacts()}
               onDelete={this.deleteContact}
               title="Contacts"
             />
-          )}
+          </>
+        )}
       </Section>
     );
   }
